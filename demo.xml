@@ -1,0 +1,35 @@
+<!-- gestion_reclamations/demo.xml -->
+<odoo>
+    <!-- Création de contacts de démonstration (réclamants) -->
+    <record id="demo_contact_1" model="res.partner">
+        <field name="name">Jean Dupont</field>
+        <field name="email">jean.dupont@example.com</field>
+    </record>
+    <record id="demo_contact_2" model="res.partner">
+        <field name="name">Marie Martin</field>
+        <field name="email">marie.martin@example.com</field>
+    </record>
+
+    <!-- Création de réclamations de démonstration -->
+    <record id="demo_reclamation_1" model="gestion.reclamation">
+        <field name="name">REC-001</field>
+        <field name="date">2023-10-01</field>
+        <field name="objet">Problème technique</field>
+        <field name="description">Le produit ne fonctionne pas correctement après la mise à jour.</field>
+        <field name="reclamant_id" ref="demo_contact_1"/>
+        <field name="urgent">True</field>
+        <field name="type_reclamation">technique</field>
+        <field name="origine_reclamation">citoyen</field>
+    </record>
+
+    <record id="demo_reclamation_2" model="gestion.reclamation">
+        <field name="name">REC-002</field>
+        <field name="date">2023-10-02</field>
+        <field name="objet">Demande commerciale</field>
+        <field name="description">Besoin d'une offre pour un produit spécifique.</field>
+        <field name="reclamant_id" ref="demo_contact_2"/>
+        <field name="urgent">False</field>
+        <field name="type_reclamation">commercial</field>
+        <field name="origine_reclamation">entreprise</field>
+    </record>
+</odoo>

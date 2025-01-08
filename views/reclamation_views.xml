@@ -1,0 +1,54 @@
+<!-- gestion_reclamations/views/reclamation_views.xml -->
+<odoo>
+    <!-- Vue Formulaire -->
+    <record model="ir.ui.view" id="reclamation_form_view">
+        <field name="name">gestion.reclamation.form</field>
+        <field name="model">gestion.reclamation</field>
+        <field name="arch" type="xml">
+            <form string="Réclamation">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="objet"/>
+                        <field name="description"/>
+                        <field name="reclamant_id"/>
+                        <field name="documents_justificatifs"/>
+                        <field name="agence_id" readonly="1"/>
+                        <field name="urgent"/>
+                        <field name="type_reclamation"/>
+                        <field name="origine_reclamation"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Liste -->
+    <record model="ir.ui.view" id="reclamation_tree_view">
+        <field name="name">gestion.reclamation.tree</field>
+        <field name="model">gestion.reclamation</field>
+        <field name="arch" type="xml">
+            <tree string="Réclamations">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="objet"/>
+                <field name="reclamant_id"/>
+                <field name="urgent"/>
+                <field name="type_reclamation"/>
+                <field name="origine_reclamation"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir la liste des réclamations -->
+    <record model="ir.actions.act_window" id="reclamation_list_action">
+        <field name="name">Réclamations</field>
+        <field name="res_model">gestion.reclamation</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu pour accéder aux réclamations -->
+    <menuitem id="main_reclamation_menu" name="Gestion des Réclamations"/>
+    <menuitem id="reclamation_menu" name="Réclamations" parent="main_reclamation_menu" action="reclamation_list_action"/>
+</odoo>
