@@ -13,12 +13,28 @@
                         <field name="objet"/>
                         <field name="description"/>
                         <field name="reclamant_id"/>
-                        <field name="documents_justificatifs"/>
                         <field name="agence_id" readonly="1"/>
                         <field name="urgent"/>
                         <field name="type_reclamation"/>
                         <field name="origine_reclamation"/>
                     </group>
+                    <!-- Section pour les documents justificatifs -->
+                <group string="Documents justificatifs">
+                    <field name="document_ids">
+                        <tree>
+                            <field name="name" string="Nom du document"/>
+                            <field name="create_uid" string="Créé par"/>
+                            <field name="file_size" string="Taille"/>
+                            <field name="create_date" string="Créé le"/>
+                        </tree>
+                        <form>
+                            <field name="name" string="Nom du document"/>
+                            <field name="create_uid" string="Créé par"/>
+                            <field name="file_size" string="Taille"/>
+                            <field name="create_date" string="Créé le"/>
+                        </form>
+                    </field>
+                </group>
                 </sheet>
             </form>
         </field>

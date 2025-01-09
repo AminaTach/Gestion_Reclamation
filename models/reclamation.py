@@ -14,8 +14,8 @@ class Reclamation(models.Model):
     # Relation avec le modèle 'res.partner' (contact)
     reclamant_id = fields.Many2one('res.partner', string="Réclamant", required=True)
 
-    # Champ pour les documents justificatifs
-    documents_justificatifs = fields.Binary(string="Documents justificatifs")
+    # Champ pour les documents justificatifs (One2many field)
+    document_ids = fields.One2many('ir.attachment', 'res_id', string="Documents justificatifs", domain=[('res_model', '=', 'gestion.reclamation')])
 
     # Champ pour l'agence (à renseigner automatiquement)
     agence_id = fields.Many2one('res.partner', string="Agence", default=lambda self: self.env.user.partner_id.id)
