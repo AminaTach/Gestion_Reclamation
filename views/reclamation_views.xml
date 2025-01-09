@@ -18,6 +18,8 @@
                         <field name="urgent"/>
                         <field name="type_reclamation"/>
                         <field name="origine_reclamation"/>
+                        <field name="etat_reclamation"/>
+                        <field name="employee_id"/>
                     </group>
                 </sheet>
             </form>
@@ -33,10 +35,12 @@
                 <field name="name"/>
                 <field name="date"/>
                 <field name="objet"/>
-                <field name="reclamant_id"/>
+                <field name="reclamant_id"/>        
                 <field name="urgent"/>
                 <field name="type_reclamation"/>
                 <field name="origine_reclamation"/>
+                <field name="employee_id"/>
+                <field name="etat_reclamation"/>
             </tree>
         </field>
     </record>
