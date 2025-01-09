@@ -1,12 +1,12 @@
 # gestion_reclamations/models/reclamation.py
-from odoo import models, fields
+from odoo import models, fields, api
 
 class Reclamation(models.Model):
     _name = 'gestion.reclamation'
     _description = 'Réclamation'
 
     # Champs de base
-    name = fields.Char(string="Identifiant", required=True, default="Nouvelle Réclamation")
+    name = fields.Char(string="Identifiant", required=True, default="Nouvelle Réclamation", readonly=True)
     date = fields.Date(string="Date", default=fields.Date.today, required=True)
     objet = fields.Char(string="Objet de la réclamation", required=True)
     description = fields.Text(string="Description")
@@ -35,3 +35,11 @@ class Reclamation(models.Model):
         ('entreprise', 'Entreprise'),
         ('cellule_veille', 'Cellule Veille'),
     ], string="Origine de la réclamation", required=True)
+
+     # Override the create method to generate a unique identifier
+    @api.model
+    def create(self, vals):
+        if vals.get('name', 'Nouvelle Réclamation') == 'Nouvelle Réclamation':
+            sequence = self.env['ir.sequence'].next_by_code('gestion.reclamation') or 'Nouvelle Réclamation'
+            vals['name'] = sequence
+        return super(Reclamation, self).create(vals)

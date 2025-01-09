@@ -1,0 +1,10 @@
+<odoo>
+    <!-- Define a sequence for reclamation identifiers -->
+    <record id="seq_reclamation" model="ir.sequence">
+        <field name="name">Reclamation Sequence</field>
+        <field name="code">gestion.reclamation</field>
+        <field name="prefix">REC-</field>  <!-- Optional: Add a prefix like "REC-" -->
+        <field name="padding">3</field>    <!-- Number of digits (e.g., REC-0001) -->
+        <field name="company_id" eval="False"/>  <!-- Global sequence, not company-specific -->
+    </record>
+</odoo>

@@ -12,6 +12,7 @@
     'depends': ['base', 'contacts', 'website'],
     'data': [
     'security/ir.model.access.csv',
+    'data/sequence.xml',
     'views/reclamation_views.xml',
     'views/reclamation_templates.xml',  # Assurez-vous que ce fichier est bien inclus
 ],

@@ -10,6 +10,14 @@
                         <input type="text" id="name" name="name" class="form-control" required="true"/>
                     </div>
                     <div class="form-group">
+                        <label for="prenom">Prénom :</label>
+                        <input type="text" id="prenom" name="prenom" class="form-control" required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Téléphone :</label>
+                        <input type="text" id="phone" name="phone" class="form-control" required="true"/>
+                    </div>
+                    <div class="form-group">
                         <label for="email">Email :</label>
                         <input type="email" id="email" name="email" class="form-control" required="true"/>
                     </div>
@@ -30,4 +38,14 @@
             </div>
         </t>
     </template>
+    <template id="reclamation_confirmation_page" name="Reclamation Confirmation Page">
+    <t t-call="website.layout">
+        <div class="container">
+            <h1>Confirmation de Réclamation</h1>
+            <p>Votre réclamation a été enregistrée avec succès.</p>
+            <p>Merci de nous avoir contactés. Nous traiterons votre demande dans les plus brefs délais.</p>
+            <a href="/" class="btn btn-primary">Retour à l'accueil</a>
+        </div>
+    </t>
+</template>
 </odoo>

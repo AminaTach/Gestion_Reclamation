@@ -4,7 +4,7 @@ import base64  # Import the base64 module
 
 class ReclamationController(http.Controller):
 
-    @http.route('/formulaire-de-reclamation', type='http', auth="public", website=True)
+    @http.route('/formulaire-de-reclamation', type='http', auth="public", website=True, csrf=False)
     def reclamation_form(self):
         """Affiche le formulaire de réclamation."""
         return request.render('Odoo_Gestion_Reclamation.reclamation_form_page')
@@ -14,22 +14,30 @@ class ReclamationController(http.Controller):
         """Traite la soumission du formulaire de réclamation."""
         # Récupérer les données du formulaire
         name = post.get('name')
+        prenom = post.get('prenom')
+        phone = post.get('phone')
         email = post.get('email')
         objet = post.get('objet')
         description = post.get('description')
         documents_justificatifs = request.httprequest.files.getlist('documents_justificatifs')  
 
-        # Rechercher ou créer le réclamant (res.partner) à partir de l'email
+        # Créer ou mettre à jour le réclamant (res.partner)
         reclamant = request.env['res.partner'].sudo().search([('email', '=', email)], limit=1)
         if not reclamant:
             reclamant = request.env['res.partner'].sudo().create({
-                'name': name,
+                'name': f"{name} {prenom}",  # Combine nom and prenom
                 'email': email,
+                'phone': phone,
+            })
+        else:
+            reclamant.write({
+                'name': f"{name} {prenom}",  # Update nom and prenom
+                'phone': phone,  # Update phone number
             })
 
         # Créer la réclamation dans le modèle gestion.reclamation
         reclamation = request.env['gestion.reclamation'].sudo().create({
-            'name': name,
+            'name': '/',
             'objet': objet,
             'description': description,
             'reclamant_id': reclamant.id,
@@ -38,6 +46,7 @@ class ReclamationController(http.Controller):
             'type_reclamation': 'technique',  # Par défaut, type technique
             'origine_reclamation': 'citoyen',  # Par défaut, origine citoyen
         })
+        
         # Enregistrer les fichiers joints
         for file in documents_justificatifs:
             if file:
@@ -48,6 +57,11 @@ class ReclamationController(http.Controller):
                     'res_model': 'gestion.reclamation',
                     'res_id': reclamation.id,
                 })
-
+        
         # Rediriger l'utilisateur vers une page de confirmation
         return request.redirect('/reclamation/confirmation')
+
+    @http.route('/reclamation/confirmation', type='http', auth="public", website=True)
+    def reclamation_confirmation(self):
+        """Affiche la page de confirmation."""
+        return request.render('Odoo_Gestion_Reclamation.reclamation_confirmation_page')
