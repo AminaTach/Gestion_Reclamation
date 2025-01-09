@@ -27,7 +27,7 @@ class Reclamation(models.Model):
     type_reclamation = fields.Selection([
         ('technique', 'Technique'),
         ('commercial', 'Commercial'),
-    ], string="Type de réclamation", required=True)
+    ], string="Type de réclamation", required=False)
 
     # Champ de sélection pour l'origine de la réclamation
     origine_reclamation = fields.Selection([
@@ -35,3 +35,7 @@ class Reclamation(models.Model):
         ('entreprise', 'Entreprise'),
         ('cellule_veille', 'Cellule Veille'),
     ], string="Origine de la réclamation", required=True)
+
+    # Champ pour l'agent (Employé)
+    agent_id = fields.Many2one('hr.employee', string="Agent Clientèle")
+    

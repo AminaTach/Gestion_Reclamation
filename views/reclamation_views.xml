@@ -18,6 +18,7 @@
                         <field name="urgent"/>
                         <field name="type_reclamation"/>
                         <field name="origine_reclamation"/>
+                        <field name="agent_id"/>
                     </group>
                 </sheet>
             </form>
@@ -37,6 +38,7 @@
                 <field name="urgent"/>
                 <field name="type_reclamation"/>
                 <field name="origine_reclamation"/>
+                 <field name="agent_id"/>
             </tree>
         </field>
     </record>
