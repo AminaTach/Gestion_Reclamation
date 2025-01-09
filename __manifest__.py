@@ -11,11 +11,11 @@
     'category': 'Services',
     'depends': ['base', 'contacts', 'website'],
     'data': [
-    'security/ir.model.access.csv',
-    'data/sequence.xml',
-    'views/reclamation_views.xml',
-    'views/reclamation_templates.xml',  # Assurez-vous que ce fichier est bien inclus
-],
+      'data/sequence.xml',
+      'security/ir.model.access.csv',
+      'views/reclamation_views.xml',
+      'views/reclamation_templates.xml',  # Assurez-vous que ce fichier est bien inclus
+    ],
     'demo': [
         'demo.xml',  # Ajoutez ce fichier pour les données de démonstration
     ],

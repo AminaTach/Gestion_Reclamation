@@ -36,8 +36,10 @@ class ReclamationController(http.Controller):
             })
 
         # Créer la réclamation dans le modèle gestion.reclamation
+        reclamation_sequence = request.env['ir.sequence'].next_by_code('gestion.reclamation')
+        reclamation_name = f"#{reclamation_sequence}"
         reclamation = request.env['gestion.reclamation'].sudo().create({
-            'name': '/',
+            'name': reclamation_name,
             'objet': objet,
             'description': description,
             'reclamant_id': reclamant.id,
