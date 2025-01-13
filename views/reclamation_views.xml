@@ -1,24 +1,40 @@
 <!-- gestion_reclamations/views/reclamation_views.xml -->
 <odoo>
     <!-- Vue Formulaire -->
+
+    <record model="ir.ui.view" id="view_task_form_inherit">
+    <field name="name">project.task.form.inherit</field>
+    <field name="model">project.task</field>
+    <field name="inherit_id" ref="project.view_task_form2"/>
+    <field name="arch" type="xml">
+        <!-- Ajouter le champ dans la vue formulaire de la tâche -->
+        <xpath expr="//field[@name='user_ids']" position="after">
+            <field name="equipe_intervention_ids" widget="many2many_tags"/>
+        </xpath>
+    </field>
+    </record>
     <record model="ir.ui.view" id="reclamation_form_view">
-        <field name="name">gestion.reclamation.form</field>
-        <field name="model">gestion.reclamation</field>
-        <field name="arch" type="xml">
-            <form string="Réclamation">
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="date"/>
-                        <field name="objet"/>
-                        <field name="description"/>
-                        <field name="reclamant_id"/>
-                        <field name="agence_id" readonly="1"/>
-                        <field name="urgent"/>
-                        <field name="type_reclamation"/>
-                        <field name="origine_reclamation"/>
-                    </group>
-                    <!-- Section pour les documents justificatifs -->
+    <field name="name">gestion.reclamation.form</field>
+    <field name="model">gestion.reclamation</field>
+    <field name="arch" type="xml">
+        <form string="Réclamation">
+            <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="objet"/>
+                    <field name="description"/>
+                    <field name="reclamant_id"/>
+                    <field name="agence_id" readonly="1"/>
+                    <field name="urgent"/>
+                    <field name="type_reclamation"/>
+                    <field name="etat_reclamation"/>
+                    <field name="origine_reclamation"/>
+                    <field name="equipe_intervention_ids" widget="many2many_tags"/>  <!-- Équipe d'intervention -->
+                    <field name="date_limite"/>  <!-- Nouveau champ : Date limite -->
+                    <field name="task_id" readonly="1"/>  <!-- Tâche associée (en lecture seule) -->
+                </group>
+                <!-- Section pour les documents justificatifs -->
                 <group string="Documents justificatifs">
                     <field name="document_ids">
                         <tree>
@@ -29,16 +45,24 @@
                         </tree>
                         <form>
                             <field name="name" string="Nom du document"/>
+                            <field name="datas" string="Fichier" widget="binary"/>  <!-- Champ pour téléverser des fichiers -->
                             <field name="create_uid" string="Créé par"/>
                             <field name="file_size" string="Taille"/>
                             <field name="create_date" string="Créé le"/>
                         </form>
                     </field>
                 </group>
-                </sheet>
-            </form>
-        </field>
-    </record>
+                <group>
+                    <button string="Créer une Tâche" type="object" name="creer_tache" class="btn-primary"
+                        invisible="etat_reclamation != 'en attente'"/>
+                    <!-- Bouton Archiver -->
+                    <button string="Archiver" type="object" name="archive_reclamation" class="btn-primary"
+                        invisible="not (etat_reclamation == 'traitee')"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
 
     <!-- Vue Liste -->
     <record model="ir.ui.view" id="reclamation_tree_view">
@@ -52,7 +76,10 @@
                 <field name="reclamant_id"/>
                 <field name="urgent"/>
                 <field name="type_reclamation"/>
+                <field name="etat_reclamation"/>
                 <field name="origine_reclamation"/>
+                <field name="date_limite"/>  <!-- Date limite -->
+                <field name="task_id"/>  <!-- Tâche associée -->
             </tree>
         </field>
     </record>
@@ -64,7 +91,59 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record model="ir.ui.view" id="reclamation_graph_view">
+        <field name="name">gestion.reclamation.graph</field>
+        <field name="model">gestion.reclamation</field>
+        <field name="arch" type="xml">
+            <graph string="Statistiques des Réclamations par État">
+                <field name="etat_reclamation" type="row"/>  <!-- Regrouper par état -->
+                <field name="id" type="measure" operator="count"/>  <!-- Compter le nombre de réclamations -->
+            </graph>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="reclamation_kanban_view">
+    <field name="name">gestion.reclamation.kanban</field>
+    <field name="model">gestion.reclamation</field>
+    <field name="arch" type="xml">
+        <kanban string="Tableau de Bord des Réclamations">
+            <field name="etat_reclamation"/>  <!-- Champ pour regrouper les réclamations par état -->
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="oe_kanban_global_click">
+                        <div class="o_kanban_record_title">
+                            <strong><field name="name"/></strong>  <!-- Afficher le nom de la réclamation -->
+                        </div>
+                        <div>
+                            <field name="etat_reclamation"/>  <!-- Afficher l'état de la réclamation -->
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+    <record model="ir.actions.act_window" id="reclamation_kanban_action">
+    <field name="name">Tableau de Bord des Réclamations</field>
+    <field name="res_model">gestion.reclamation</field>
+    <field name="view_mode">kanban,tree,form,graph</field>  <!-- Ajouter kanban -->
+</record>
+
+
+    <!-- Action pour ouvrir la liste des réclamations archivées -->
+<record model="ir.actions.act_window" id="reclamation_archivee_list_action">
+    <field name="name">Réclamations Archivées</field>
+    <field name="res_model">gestion.reclamation</field>
+    <field name="domain">[('etat_reclamation', '=', 'archivee')]</field>  <!-- Filtrer les réclamations archivées -->
+    <field name="view_mode">tree,form,graph</field>
+</record>
+
+
+
     <!-- Menu pour accéder aux réclamations -->
     <menuitem id="main_reclamation_menu" name="Gestion des Réclamations"/>
     <menuitem id="reclamation_menu" name="Réclamations" parent="main_reclamation_menu" action="reclamation_list_action"/>
+    <menuitem id="reclamation_archivee_menu" name="Réclamations Archivées" parent="reclamation_menu" action="reclamation_archivee_list_action"/>
+    <menuitem id="reclamation_kanban_menu" name="Reporting" parent="main_reclamation_menu" action="reclamation_kanban_action"/>
 </odoo>
