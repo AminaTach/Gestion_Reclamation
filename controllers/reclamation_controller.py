@@ -47,6 +47,7 @@ class ReclamationController(http.Controller):
             'urgent': False,  # Par défaut, non urgent
             'type_reclamation': 'technique',  # Par défaut, type technique
             'origine_reclamation': 'citoyen',  # Par défaut, origine citoyen
+            'etat_reclamation': 'en attente',
         })
         
         # Enregistrer les fichiers joints
