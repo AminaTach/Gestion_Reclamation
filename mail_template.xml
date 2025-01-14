@@ -1,0 +1,12 @@
+<odoo>
+    <record id="email_template_receipt" model="mail.template">
+        <field name="name">Reçu de réception</field>
+        <field name="model_id" ref="Gestion_Reclamation.model_gestion_reclamation" />
+        <field name="subject">Reçu de réception de votre réclamation</field>
+        <field name="email_from">${user.email}</field>
+        <field name="email_to">${object.reclamant_id.email}</field>
+        <field name="body_html">
+<![CDATA[ <p>Bonjour ,</p> <p>Votre réclamation a bien été reçue. Voici le reçu de réception en pièce jointe.</p> <p>Cordialement,</p> <p>L'équipe de support & assistance.</p> ]]>
+</field>
+    </record>
+</odoo>

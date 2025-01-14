@@ -1,0 +1,35 @@
+<odoo>
+    <!--  Rapport PDF pour le reçu de réception  -->
+    <template id="report_receipt">
+    <t t-call="web.html_container">
+        <t t-call="web.internal_layout">
+            <div class="page" style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h1 style="text-align: center; font-size: 24px; margin-bottom: 20px;">Reçu de Réception</h1>
+                <div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+                    <t t-if="object">
+                        <p><strong>Num de réclamation :</strong> <span style="margin-left: 10px;"><t t-esc="object.name" /></span></p>
+                        <p><strong>Date :</strong> <span style="margin-left: 10px;"><t t-esc="object.date" /></span></p>
+                        <p><strong>Objet :</strong> <span style="margin-left: 10px;"><t t-esc="object.objet" /></span></p>
+                        <p><strong>Description :</strong> <span style="margin-left: 10px;"><t t-esc="object.description" /></span></p>
+                        <p><strong>Réclamant :</strong> <span style="margin-left: 10px;"><t t-esc="object.reclamant_id.name" /></span></p>
+                    </t>
+                    <t t-else="">
+                        <p style="text-align: center; color: #999;">Aucun objet disponible.</p>
+                    </t>
+                </div>
+                <p style="text-align: right; margin-top: 20px;">Merci de votre confiance.</p>
+            </div>
+        </t>
+    </t>
+</template>
+
+    <!--  Action pour le rapport  -->
+    <record id="action_report_receipt" model="ir.actions.report">
+        <field name="name">Reçu de réception</field>
+        <field name="model">gestion.reclamation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">Gestion_Reclamation.report_receipt</field>
+        <field name="paperformat_id" ref="base.paperformat_euro" />
+        <field name="binding_model_id" ref="Gestion_Reclamation.model_gestion_reclamation" />
+    </record>
+</odoo>

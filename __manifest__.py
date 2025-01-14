@@ -14,7 +14,9 @@
       'data/sequence.xml',
       'security/ir.model.access.csv',
       'views/reclamation_views.xml',
-      'views/reclamation_templates.xml',  # Assurez-vous que ce fichier est bien inclus
+      'views/reclamation_templates.xml',
+      'report/receipt_report.xml',
+      'mail_template.xml'
     ],
     'demo': [
         'demo.xml',  # Ajoutez ce fichier pour les données de démonstration
