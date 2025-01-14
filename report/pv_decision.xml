@@ -1,0 +1,87 @@
+<odoo>
+    <!--  Rapport PDF pour le reçu de réception  -->
+    <template id="report_pv_decision">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page"
+                    style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <h1 style="text-align: center; font-size: 24px; margin-bottom: 20px;">Procès-Verbal
+                        de Décision</h1>
+                    <div style="border: 1px solid #ddd; padding: 20px; border-radius: 5px;">
+                        <t t-if="object">
+                            <p>
+                                <strong>Numéro de réclamation :</strong>
+                                <span style="margin-left: 10px;">
+                                    <t t-esc="object.name" />
+                                </span>
+                            </p>
+                            <p>
+                                <strong>Date :</strong>
+                                <span style="margin-left: 10px;">
+                                    <t t-esc="object.date" />
+                                </span>
+                            </p>
+                            <p>
+                                <strong>Type de réclamation :</strong>
+                                <span style="margin-left: 10px;">
+                                    <t t-esc="object.type_reclamation" />
+                                </span>
+                            </p>
+                            <p>
+                                <strong>Réclamant :</strong>
+                                <span style="margin-left: 10px;">
+                                    <t t-esc="object.reclamant_id.name" />
+                                </span>
+                            </p>
+                            <p>
+                                <strong>Décision :</strong>
+                                <span style="margin-left: 10px;">
+                                    <t t-esc="object.decision" />
+                                </span>
+                            </p>
+                        </t>
+                        <t t-else="">
+                            <p style="text-align: center; color: #999;">Aucun objet disponible.</p>
+                        </t>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h2 style="font-size: 18px; margin-bottom: 10px;">Équipe d'intervention</h2>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th
+                                        style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                                        Nom</th>
+                                    <th
+                                        style="border: 1px solid #ddd; padding: 8px; text-align: left;">
+                                        Signature</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="object.equipe_intervention_ids" t-as="membre">
+                                    <tr>
+                                        <td style="border: 1px solid #ddd; padding: 8px;">
+                                            <t t-esc="membre.name" />
+                                        </td>
+                                        <td style="border: 1px solid #ddd; padding: 8px;"></td>  <!--
+                                        Case vide pour la signature -->
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_report_pv_decision" model="ir.actions.report">
+        <field name="name">Procès-Verbal de Décision</field>
+        <field name="model">gestion.reclamation</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">Gestion_Reclamation.report_pv_decision</field>
+        <field name="paperformat_id" ref="base.paperformat_euro" />
+        <field name="binding_model_id" ref="Gestion_Reclamation.model_gestion_reclamation" />
+    </record>
+
+</odoo>

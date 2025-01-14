@@ -68,6 +68,7 @@ class Reclamation(models.Model):
 
     date_limite = fields.Date(string="Date Limite", required=True)  # Date limite pour traiter la réclamation
     task_id = fields.Many2one('project.task', string="Tâche Associée")  # Tâche associée
+    decision = fields.Char(string='Décision')
 
     def creer_tache(self):
         for rec in self:

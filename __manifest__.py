@@ -16,6 +16,7 @@
       'views/reclamation_views.xml',
       'views/reclamation_templates.xml',
       'report/receipt_report.xml',
+      'report/pv_decision.xml',
       'mail_template.xml'
     ],
     'demo': [
