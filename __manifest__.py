@@ -9,11 +9,10 @@
     """,
     'author': 'Equipe3',
     'category': 'Services',
-    'depends': ['base', 'contacts', 'hr'],
+    'depends': ['base', 'contacts', 'hr', 'mail'],
     'data': [
         'security/ir.model.access.csv',
-        'views/reclamation_views.xml', 
-        'views/information_telephone_views.xml', 
+        'views/reclamation_views.xml',     
     ],
     'demo': [
         'demo.xml',  # Ajoutez ce fichier pour les données de démonstration

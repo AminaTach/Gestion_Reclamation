@@ -4,6 +4,8 @@ from odoo import models, fields, api
 class Reclamation(models.Model):
     _name = 'gestion.reclamation'
     _description = 'Réclamation'
+    _inherit = ['mail.thread']  # Add this line
+
 
     # Champs de base
     name = fields.Char(string="Identifiant", required=True, default="Nouvelle Réclamation")
@@ -39,13 +41,12 @@ class Reclamation(models.Model):
     # Champ de l'etat de reclamation
     etat_reclamation = fields.Selection(
         [
-            ('draft', 'Brouillon'),
-            ('open', 'Ouverte'),
-            ('resolved', 'Résolue'),
-            ('closed', 'Fermée')
+        ('nouvelle', 'Nouvelle'),
+        ('en_cours', 'En cours'),
+        ('traite', 'Traité'),
         ],
         string="État",
-        default='draft',
+        default='Nouvelle',
         required=True,
     )
 
@@ -54,10 +55,12 @@ class Reclamation(models.Model):
         'information.telephone', 'reclamation_id', string="Informations Téléphoniques"
     )
 
-
     # Champ de l'employé responsable de la réclamation
     employee_id = fields.Many2one('hr.employee', string="Employé", help="Sélectionnez l'employé responsable de cette réclamation.")
 
+    # Champ pour l'etat d'envoi du questionnaire
+    questionnaire_envoye = fields.Boolean(string='Questionnaire Envoyé', default=False)
+    
 
 
     @api.model
@@ -92,7 +95,7 @@ class Reclamation(models.Model):
         mail_values = {
             'subject': 'Notification Réclamation',
             'body_html': f'<p>{message}</p>',
-            'email_to': self.employee_id.work_email or 'admin@example.com',
+            'email_to': self.employee_id.work_email,
         }
         self.env['mail.mail'].create(mail_values).send()
 
