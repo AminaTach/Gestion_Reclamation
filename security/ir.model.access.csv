@@ -1,1 +1,5 @@
-id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gestion_reclamation,gestion.reclamation,model_gestion_reclamation,,1,1,1,1
+Gestion_Reclamation.access_information_telephone,access_information_telephone,Gestion_Reclamation.model_information_telephone,base.group_user,1,1,1,1
+Gestion_Reclamation.access_information_telephone,access_information_telephone,Gestion_Reclamation.model_information_telephone,base.group_user,1,1,1,1
+Gestion_Reclamation.access_gestion_appel,access_gestion_appel,Gestion_Reclamation.model_gestion_appel,base.group_user,1,1,1,1
