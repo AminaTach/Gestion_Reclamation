@@ -9,6 +9,7 @@
     """,
     'author': 'Equipe3',
     'category': 'Services',
+<<<<<<< HEAD
     'depends': ['base', 'contacts', 'website'],
     'data': [
       'data/sequence.xml',
@@ -18,6 +19,12 @@
       'report/receipt_report.xml',
       'report/pv_decision.xml',
       'mail_template.xml'
+=======
+    'depends': ['base', 'contacts', 'hr', 'mail'],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/reclamation_views.xml',     
+>>>>>>> bb3ddcfb97d365064683c195e3cb1286c8d5c4c6
     ],
     'demo': [
         'demo.xml',  # Ajoutez ce fichier pour les données de démonstration

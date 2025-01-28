@@ -20,6 +20,7 @@
             <form string="Réclamation">
                 <sheet>
                     <group>
+<<<<<<< HEAD
                         <button string="Envoyer le reçu de réception" type="object"
                             name="action_send_receipt" class="btn-primary"
                             style="white-space: nowrap; padding: 5px 10px;" />
@@ -30,6 +31,21 @@
                             string="Archiver" type="object" name="archive_reclamation"
                             class="btn-primary" invisible="not (etat_reclamation == 'traitee')"
                             style="white-space: nowrap; padding: 5px 10px;" />
+=======
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="objet"/>
+                        <field name="description"/>
+                        <field name="reclamant_id"/>
+                        <field name="documents_justificatifs"/>
+                        <field name="agence_id" readonly="1"/>
+                        <field name="urgent"/>
+                        <field name="type_reclamation"/>
+                        <field name="origine_reclamation"/>
+                        <field name="etat_reclamation"/>
+                        <field name="employee_id"/>
+                        <field name="questionnaire_envoye" readonly="1"/>
+>>>>>>> bb3ddcfb97d365064683c195e3cb1286c8d5c4c6
                     </group>
                     <group>
                         <field name="name" />
@@ -79,6 +95,7 @@
         <field name="model">gestion.reclamation</field>
         <field name="arch" type="xml">
             <tree string="Réclamations">
+<<<<<<< HEAD
                 <field name="name" />
                 <field name="date" />
                 <field name="objet" />
@@ -89,6 +106,18 @@
                 <field name="origine_reclamation" />
                 <field name="date_limite" />  <!-- Date limite -->
                 <field name="task_id" />  <!-- Tâche associée -->
+=======
+                <field name="name"/>
+                <field name="date"/>
+                <field name="objet"/>
+                <field name="reclamant_id"/>        
+                <field name="urgent"/>
+                <field name="type_reclamation"/>
+                <field name="origine_reclamation"/>
+                <field name="employee_id"/>
+                <field name="etat_reclamation"/>
+                <field name="questionnaire_envoye"/>
+>>>>>>> bb3ddcfb97d365064683c195e3cb1286c8d5c4c6
             </tree>
         </field>
     </record>
@@ -156,6 +185,7 @@
 
 
     <!-- Menu pour accéder aux réclamations -->
+<<<<<<< HEAD
     <menuitem id="main_reclamation_menu" name="Gestion des Réclamations" />
     <menuitem id="reclamation_menu" name="Réclamations" parent="main_reclamation_menu"
         action="reclamation_list_action" />
@@ -166,4 +196,145 @@
         action="reclamation_archivee_list_action" />
     <menuitem id="reclamation_kanban_menu" name="Reporting" parent="main_reclamation_menu"
         action="reclamation_kanban_action" />
+=======
+    <menuitem id="main_reclamation_menu" name="Gestion des Réclamations"/>
+    <menuitem id="reclamation_menu" name="Réclamations" parent="main_reclamation_menu" action="reclamation_list_action"/>
+
+    <!-- Vue Formulaire -->
+    <record model="ir.ui.view" id="information_telephone_form_view">
+        <field name="name">information.telephone.form</field>
+        <field name="model">information.telephone</field>
+        <field name="arch" type="xml">
+            <form string="Information Téléphonique">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="contact_date"/>
+                        <field name="phone_number"/>
+                    </group>
+                    <group>
+                        <field name="reclamation_id"/>
+                        <field name="user_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Liste -->
+    <record model="ir.ui.view" id="information_telephone_tree_view">
+        <field name="name">information.telephone.tree</field>
+        <field name="model">information.telephone</field>
+        <field name="arch" type="xml">
+            <tree string="Informations Téléphoniques">
+                <field name="name"/>
+                <field name="contact_date"/>
+                <field name="phone_number"/>
+                <field name="reclamation_id"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir la liste des informations téléphoniques -->
+    <record model="ir.actions.act_window" id="information_telephone_list_action">
+        <field name="name">Informations Téléphoniques</field>
+        <field name="res_model">information.telephone</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu pour accéder aux informations téléphoniques -->
+    <record id="view_information_telephone_form" model="ir.ui.view">
+        <field name="name">information.telephone.form</field>
+        <field name="model">information.telephone</field>
+        <field name="arch" type="xml">
+            <form string="Information Téléphonique">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="contact_date"/>
+                        <field name="phone_number"/>
+                    </group>
+                    <group>
+                        <field name="reclamation_id"/>
+                        <field name="user_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_information_telephone_tree" model="ir.ui.view">
+        <field name="name">information.telephone.tree</field>
+        <field name="model">information.telephone</field>
+        <field name="arch" type="xml">
+            <tree string="Informations Téléphoniques">
+                <field name="name"/>
+                <field name="contact_date"/>
+                <field name="phone_number"/>
+                <field name="reclamation_id"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+    <menuitem id="information_telephone_menu" name="Informations Téléphoniques" parent="appel_menu" action="information_telephone_list_action"/>
+
+    <!-- Vue Formulaire -->
+    <record model="ir.ui.view" id="appel_form_view">
+        <field name="name">gestion.appel.form</field>
+        <field name="model">gestion.appel</field>
+        <field name="arch" type="xml">
+            <form string="Détails de l'Appel">
+                <sheet>
+                <group>
+                    <field name="name"/>
+                    <field name="date_appel"/>
+                    <field name="duree"/>
+                    <field name="statut"/>
+                </group>
+                <group>
+                    <field name="contact_id"/>
+                    <field name="employee_id"/>
+                    <field name="reclamant_id"/>
+                </group>
+                <group string="Description">
+                    <field name="description" colspan="2"/>
+                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Liste -->
+    <record model="ir.ui.view" id="appel_tree_view">
+        <field name="name">gestion.appel.tree</field>
+        <field name="model">gestion.appel</field>
+        <field name="arch" type="xml">
+            <tree string="Appels">
+                <field name="name"/>
+                <field name="date_appel"/>
+                <field name="duree"/>
+                <field name="statut"/>
+                <field name="contact_id"/>
+                <field name="employee_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir la liste des appels -->
+    <record model="ir.actions.act_window" id="appel_list_action">
+      <field name="name">Appels</field>
+      <field name="res_model">gestion.appel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu pour accéder aux appels -->
+    <menuitem id="appel_menu" name="Appels" parent="main_reclamation_menu" action="appel_list_action"/>
+>>>>>>> bb3ddcfb97d365064683c195e3cb1286c8d5c4c6
 </odoo>

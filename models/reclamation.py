@@ -1,5 +1,6 @@
 # gestion_reclamations/models/reclamation.py
 from odoo import models, fields, api
+<<<<<<< HEAD
 from odoo.exceptions import ValidationError
 import base64
 import logging
@@ -16,10 +17,14 @@ class ProjectTask(models.Model):
         string="Équipe d'Intervention",  # Libellé du champ
         help="Sélectionnez les employés assignés à cette tâche."
     )
+=======
+>>>>>>> bb3ddcfb97d365064683c195e3cb1286c8d5c4c6
 
 class Reclamation(models.Model):
     _name = 'gestion.reclamation'
     _description = 'Réclamation'
+    _inherit = ['mail.thread']  # Add this line
+
 
     # Champs de base
     name = fields.Char(string="Identifiant", required=True, default="Nouvelle Réclamation", readonly=True)
@@ -59,6 +64,7 @@ class Reclamation(models.Model):
         ('cellule_veille', 'Cellule Veille'),
     ], string="Origine de la réclamation", required=True)
 
+<<<<<<< HEAD
     archived = fields.Boolean(string="Archivé", default=False)  # Add this line
     equipe_intervention_ids = fields.Many2many(
         'hr.employee',  # Modèle lié
@@ -213,3 +219,74 @@ class Reclamation(models.Model):
         pdf_content = buffer.getvalue()
         buffer.close()
         return pdf_content
+=======
+    # Champ de l'etat de reclamation
+    etat_reclamation = fields.Selection(
+        [
+        ('nouvelle', 'Nouvelle'),
+        ('en_cours', 'En cours'),
+        ('traite', 'Traité'),
+        ],
+        string="État",
+        default='Nouvelle',
+        required=True,
+    )
+
+    # Champ pour les informations téléphoniques
+    information_ids = fields.One2many(
+        'information.telephone', 'reclamation_id', string="Informations Téléphoniques"
+    )
+
+    # Champ de l'employé responsable de la réclamation
+    employee_id = fields.Many2one('hr.employee', string="Employé", help="Sélectionnez l'employé responsable de cette réclamation.")
+
+    # Champ pour l'etat d'envoi du questionnaire
+    questionnaire_envoye = fields.Boolean(string='Questionnaire Envoyé', default=False)
+    
+
+
+    @api.model
+    def create(self, vals):
+        """Override create to send notification on creation."""
+        res = super(GestionReclamation, self).create(vals)
+        res._send_notification('create')
+        return res
+
+    @api.onchange('etat_reclamation')
+    def _onchange_etat_reclamation(self):
+        """Send notification when the state changes."""
+        for record in self:
+            record._send_notification('change')
+
+    def _send_notification(self, event):
+        """Send notification based on event."""
+        message = ""
+        if event == 'create':
+            message = f"La réclamation '{self.name}' a été créée."
+        elif event == 'change':
+            message = f"L'état de la réclamation '{self.name}' est passé à '{dict(self._fields['etat_reclamation'].selection).get(self.etat_reclamation)}'."
+        
+        # Envoyer un e-mail
+        self._send_email_notification(message)
+
+        # Envoyer un SMS (utilisez une passerelle SMS, exemple fictif ici)
+        # self._send_sms_notification(message)
+
+    def _send_email_notification(self, message):
+        """Send email notification."""
+        mail_values = {
+            'subject': 'Notification Réclamation',
+            'body_html': f'<p>{message}</p>',
+            'email_to': self.employee_id.work_email,
+        }
+        self.env['mail.mail'].create(mail_values).send()
+
+    def _send_sms_notification(self, message):
+        """Send SMS notification (example implementation)."""
+        sms_service = self.env['sms.service']
+        if sms_service:
+            sms_service.send_sms(
+                number=self.employee_id.mobile_phone,
+                message=message
+            )
+>>>>>>> bb3ddcfb97d365064683c195e3cb1286c8d5c4c6
