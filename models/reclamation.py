@@ -4,6 +4,7 @@ from odoo import models, fields, api
 class Reclamation(models.Model):
     _name = 'gestion.reclamation'
     _description = 'Réclamation'
+    _inherit = ['mail.thread']  
 
     # Champs de base
     name = fields.Char(string="Identifiant", required=True, default="Nouvelle Réclamation")
@@ -39,13 +40,12 @@ class Reclamation(models.Model):
     # Champ de l'etat de reclamation
     etat_reclamation = fields.Selection(
         [
-            ('draft', 'Brouillon'),
-            ('open', 'Ouverte'),
-            ('resolved', 'Résolue'),
-            ('closed', 'Fermée')
+        ('nouvelle', 'Nouvelle'),
+        ('en_cours', 'En cours'),
+        ('traite', 'Traité'),
         ],
         string="État",
-        default='draft',
+        default='Nouvelle',
         required=True,
     )
 
@@ -54,11 +54,10 @@ class Reclamation(models.Model):
         'information.telephone', 'reclamation_id', string="Informations Téléphoniques"
     )
 
-
     # Champ de l'employé responsable de la réclamation
     employee_id = fields.Many2one('hr.employee', string="Employé", help="Sélectionnez l'employé responsable de cette réclamation.")
 
-
+    questionnaire_envoye = fields.Boolean(string='Questionnaire Envoyé', default=False)
 
     @api.model
     def create(self, vals):

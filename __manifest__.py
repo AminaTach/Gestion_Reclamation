@@ -17,6 +17,7 @@
         'website',     # Module Website
         'project',     # Module Project
         'survey',      # Module Survey
+        'mail',        # Module Mail
     ],
 
     'data': [
