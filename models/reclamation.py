@@ -168,7 +168,7 @@ class Reclamation(models.Model):
             raise ValidationError(f"Une erreur s'est produite lors de l'envoi du reçu : {str(e)}")
 
     def _generate_pdf_content(self):
-        # Exemple de génération de contenu PDF (à adapter selon vos besoins)
+  
         from io import BytesIO
         from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import A4
