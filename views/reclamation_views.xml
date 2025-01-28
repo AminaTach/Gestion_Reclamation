@@ -22,11 +22,12 @@
                     <group>
                         <button string="Envoyer le reçu de réception" type="object"
                             name="action_send_receipt" class="btn-primary"
-                            style="white-space: nowrap; padding: 5px 10px; display: flex; align-items: center; justify-content: center;" />
+                            style="white-space: nowrap; padding: 5px 10px;" />
                         <button string="Créer une Tâche" type="object" name="creer_tache"
                             class="btn-primary" invisible="etat_reclamation != 'en attente'"
                             style="white-space: nowrap; padding: 5px 10px;" />
-                        <button string="Archiver" type="object" name="archive_reclamation"
+                        <button
+                            string="Archiver" type="object" name="archive_reclamation"
                             class="btn-primary" invisible="not (etat_reclamation == 'traitee')"
                             style="white-space: nowrap; padding: 5px 10px;" />
                     </group>
