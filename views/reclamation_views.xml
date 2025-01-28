@@ -20,6 +20,7 @@
                         <field name="origine_reclamation"/>
                         <field name="etat_reclamation"/>
                         <field name="employee_id"/>
+                        <field name="agent_id"/>
                     </group>
                 </sheet>
             </form>
@@ -41,6 +42,8 @@
                 <field name="origine_reclamation"/>
                 <field name="employee_id"/>
                 <field name="etat_reclamation"/>
+                 <field name="agent_id"/>
+
             </tree>
         </field>
     </record>

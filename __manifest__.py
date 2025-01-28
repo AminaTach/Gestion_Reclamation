@@ -9,7 +9,16 @@
     """,
     'author': 'Equipe3',
     'category': 'Services',
-    'depends': ['base', 'contacts', 'hr'],
+
+     'depends': [
+        'base', 
+        'contacts', 
+        'hr',          # Module Employee
+        'website',     # Module Website
+        'project',     # Module Project
+        'survey',      # Module Survey
+    ],
+
     'data': [
         'security/ir.model.access.csv',
         'views/reclamation_views.xml', 

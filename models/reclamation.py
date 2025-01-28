@@ -27,7 +27,7 @@ class Reclamation(models.Model):
     type_reclamation = fields.Selection([
         ('technique', 'Technique'),
         ('commercial', 'Commercial'),
-    ], string="Type de réclamation", required=True)
+    ], string="Type de réclamation", required=False)
 
     # Champ de sélection pour l'origine de la réclamation
     origine_reclamation = fields.Selection([
