@@ -66,7 +66,8 @@ class Reclamation(models.Model):
         help="Sélectionnez les employés assignés à cette réclamation."
     )  # Équipe d'intervention
 
-    date_limite = fields.Date(string="Date Limite", required=True)  # Date limite pour traiter la réclamation
+    date_limite = fields.Date( string="Date Limite", required=True, default=lambda self: fields.Date.today() + timedelta(days=7) )
+
     task_id = fields.Many2one('project.task', string="Tâche Associée")  # Tâche associée
     decision = fields.Char(string='Décision')
 

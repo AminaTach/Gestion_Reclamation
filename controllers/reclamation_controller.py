@@ -1,13 +1,14 @@
 from odoo import http
 from odoo.http import request
 import base64  # Import the base64 module
+from datetime import datetime, timedelta
 
 class ReclamationController(http.Controller):
 
     @http.route('/formulaire-de-reclamation', type='http', auth="public", website=True, csrf=False)
     def reclamation_form(self):
         """Affiche le formulaire de réclamation."""
-        return request.render('Odoo_Gestion_Reclamation.reclamation_form_page')
+        return request.render('Gestion_Reclamation.reclamation_form_page')
 
     @http.route('/reclamation/submit', type='http', auth="public", website=True, csrf=False)
     def submit_reclamation(self, **post):
@@ -36,6 +37,7 @@ class ReclamationController(http.Controller):
             })
 
         # Créer la réclamation dans le modèle gestion.reclamation
+        date_limite = (datetime.now() + timedelta(days=7)).date()  # Set to 7 days from today
         reclamation_sequence = request.env['ir.sequence'].next_by_code('gestion.reclamation')
         reclamation_name = f"#{reclamation_sequence}"
         reclamation = request.env['gestion.reclamation'].sudo().create({
@@ -48,6 +50,7 @@ class ReclamationController(http.Controller):
             'type_reclamation': 'technique',  # Par défaut, type technique
             'origine_reclamation': 'citoyen',  # Par défaut, origine citoyen
             'etat_reclamation': 'en attente',
+            'date_limite': date_limite,
         })
         
         # Enregistrer les fichiers joints
@@ -67,4 +70,4 @@ class ReclamationController(http.Controller):
     @http.route('/reclamation/confirmation', type='http', auth="public", website=True)
     def reclamation_confirmation(self):
         """Affiche la page de confirmation."""
-        return request.render('Odoo_Gestion_Reclamation.reclamation_confirmation_page')
+        return request.render('Gestion_Reclamation.reclamation_confirmation_page')
