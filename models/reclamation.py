@@ -1,4 +1,3 @@
-# gestion_reclamations/models/reclamation.py
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 import base64
@@ -14,8 +13,10 @@ class ProjectTask(models.Model):
     equipe_intervention_ids = fields.Many2many(
         'hr.employee',  # Modèle lié
         string="Équipe d'Intervention",  # Libellé du champ
-        help="Sélectionnez les employés assignés à cette tâche."
+        help="Sélectionnez les employés assignés à cette tâche.",
     )
+    decision = fields.Char(string="Décision", help="Décision prise pour cette tâche.")
+
 
 class Reclamation(models.Model):
     _name = 'gestion.reclamation'
@@ -31,7 +32,8 @@ class Reclamation(models.Model):
     reclamant_id = fields.Many2one('res.partner', string="Réclamant", required=True)
 
     # Champ pour les documents justificatifs (One2many field)
-    document_ids = fields.One2many('ir.attachment', 'res_id', string="Documents justificatifs", domain=[('res_model', '=', 'gestion.reclamation')])
+    document_ids = fields.One2many('ir.attachment', 'res_id', string="Documents justificatifs",
+                                   domain=[('res_model', '=', 'gestion.reclamation')])
 
     # Champ pour l'agence (à renseigner automatiquement)
     agence_id = fields.Many2one('res.partner', string="Agence", default=lambda self: self.env.user.partner_id.id)
@@ -50,7 +52,7 @@ class Reclamation(models.Model):
         ('en cours de traitement', 'En cours de traitement'),
         ('traitee', 'Traitee'),
         ('archivee', 'Archivée'),
-    ], string="Etat de réclamation", required=True, default = "en attente")
+    ], string="Etat de réclamation", required=True, default="en attente")
 
     # Champ de sélection pour l'origine de la réclamation
     origine_reclamation = fields.Selection([
@@ -59,7 +61,7 @@ class Reclamation(models.Model):
         ('cellule_veille', 'Cellule Veille'),
     ], string="Origine de la réclamation", required=True)
 
-    archived = fields.Boolean(string="Archivé", default=False)  # Add this line
+    archived = fields.Boolean(string="Archivé", default=False)  # Ajout du champ archivé
     equipe_intervention_ids = fields.Many2many(
         'hr.employee',  # Modèle lié
         string="Équipe d'Intervention",  # Libellé du champ
@@ -68,7 +70,16 @@ class Reclamation(models.Model):
 
     date_limite = fields.Date(string="Date Limite", required=True)  # Date limite pour traiter la réclamation
     task_id = fields.Many2one('project.task', string="Tâche Associée")  # Tâche associée
-    decision = fields.Char(string='Décision')
+    decision = fields.Char(string='Décision', compute='_compute_decision', store=True, readonly=True)
+
+    # Méthode pour calculer la valeur du champ "decision"
+    @api.depends('task_id.decision')
+    def _compute_decision(self):
+        for rec in self:
+            if rec.task_id and rec.task_id.decision:
+                rec.decision = rec.task_id.decision
+            else:
+                rec.decision = False
 
     def creer_tache(self):
         for rec in self:
@@ -108,14 +119,13 @@ class Reclamation(models.Model):
             else:
                 raise models.ValidationError("Seules les réclamations traitées peuvent être archivées.")
 
-     # Override the create method to generate a unique identifier
+    # Override the create method to generate a unique identifier
     @api.model
     def create(self, vals):
         if vals.get('name', 'Nouvelle Réclamation') == 'Nouvelle Réclamation':
             sequence = self.env['ir.sequence'].next_by_code('gestion.reclamation') or 'Nouvelle Réclamation'
             vals['name'] = sequence
         return super(Reclamation, self).create(vals)
-
 
     def action_send_receipt(self):
         try:
@@ -168,44 +178,55 @@ class Reclamation(models.Model):
             raise ValidationError(f"Une erreur s'est produite lors de l'envoi du reçu : {str(e)}")
 
     def _generate_pdf_content(self):
-  
         from io import BytesIO
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import A4
-        from reportlab.lib import colors
         from reportlab.lib.styles import getSampleStyleSheet
         from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
 
         buffer = BytesIO()
         doc = SimpleDocTemplate(buffer, pagesize=A4)
         styles = getSampleStyleSheet()
- 
+
         # Définir les styles
         title_style = styles['Title']
-        heading_style = styles['Heading1']
+        title_style.fontName = 'Helvetica-Bold'  # Mettre le titre en gras
         body_style = styles['BodyText']
-        
+
         content = []
 
-        # Titre
-        title = Paragraph(f"Reçu de réclamation: {self.name}", title_style)
+        # Titre (en gras)
+        title = Paragraph("Reçu de Réception", title_style)
         content.append(title)
         content.append(Spacer(1, 12))
 
+        # Numéro de réclamation
+        num_reclamation = Paragraph(f"<b>Num de réclamation :</b> {self.name}", body_style)
+        content.append(num_reclamation)
+        content.append(Spacer(1, 12))
+
         # Date
-        date = Paragraph(f"Date: {self.date}", heading_style)
+        date = Paragraph(f"<b>Date :</b> {self.date}", body_style)
         content.append(date)
         content.append(Spacer(1, 12))
 
-        # Réclamant
-        reclamant = Paragraph(f"Réclamant: {self.reclamant_id.name}", heading_style)
-        content.append(reclamant)
+        # Objet
+        objet = Paragraph(f"<b>Objet :</b> {self.objet}", body_style)
+        content.append(objet)
         content.append(Spacer(1, 12))
 
         # Description
-        description = Paragraph(f"Description: {self.description}", body_style)
+        description = Paragraph(f"<b>Description :</b> {self.description}", body_style)
         content.append(description)
         content.append(Spacer(1, 12))
+
+        # Réclamant
+        reclamant = Paragraph(f"<b>Réclamant :</b> {self.reclamant_id.name}", body_style)
+        content.append(reclamant)
+        content.append(Spacer(1, 12))
+
+        # Message de fin
+        message = Paragraph("Merci de votre confiance.", body_style)
+        content.append(message)
 
         # Construire le PDF
         doc.build(content)

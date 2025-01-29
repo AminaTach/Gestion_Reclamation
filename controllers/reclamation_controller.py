@@ -7,7 +7,7 @@ class ReclamationController(http.Controller):
     @http.route('/formulaire-de-reclamation', type='http', auth="public", website=True, csrf=False)
     def reclamation_form(self):
         """Affiche le formulaire de réclamation."""
-        return request.render('Odoo_Gestion_Reclamation.reclamation_form_page')
+        return request.render('Gestion_Reclamation.reclamation_form_page')
 
     @http.route('/reclamation/submit', type='http', auth="public", website=True, csrf=False)
     def submit_reclamation(self, **post):
@@ -67,4 +67,4 @@ class ReclamationController(http.Controller):
     @http.route('/reclamation/confirmation', type='http', auth="public", website=True)
     def reclamation_confirmation(self):
         """Affiche la page de confirmation."""
-        return request.render('Odoo_Gestion_Reclamation.reclamation_confirmation_page')
+        return request.render('Gestion_Reclamation.reclamation_confirmation_page')
