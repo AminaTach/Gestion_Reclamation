@@ -10,9 +10,11 @@
             <!-- Ajouter le champ dans la vue formulaire de la tâche -->
             <xpath expr="//field[@name='user_ids']" position="after">
                 <field name="equipe_intervention_ids" widget="many2many_tags" />
+                <field name="decision" string="Décision" />
             </xpath>
         </field>
     </record>
+
     <record model="ir.ui.view" id="reclamation_form_view">
         <field name="name">gestion.reclamation.form</field>
         <field name="model">gestion.reclamation</field>
