@@ -49,24 +49,18 @@
                         <field name="decision" />
                     </group>
                     <!-- Section pour les documents justificatifs -->
-                    <group string="Documents justificatifs">
-                        <field name="document_ids">
-                            <tree>
-                                <field name="name" string="Nom du document" />
-                                <field name="create_uid" string="Créé par" />
-                                <field name="file_size" string="Taille" />
-                                <field name="create_date" string="Créé le" />
-                            </tree>
-                            <form>
-                                <field name="name" string="Nom du document" />
-                                <field name="datas" string="Fichier" widget="binary" />  <!-- Champ
-                                pour téléverser des fichiers -->
-                                <field name="create_uid" string="Créé par" />
-                                <field name="file_size" string="Taille" />
-                                <field name="create_date" string="Créé le" />
-                            </form>
-                        </field>
-                    </group>
+                    <group>
+                    <field name="document_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="datas" filename="name" string="File"/>
+                        </tree>
+                        <form>
+                            <field name="name"/>
+                            <field name="datas" filename="name" string="File"/>
+                        </form>
+                    </field>
+                </group>
 
                 </sheet>
             </form>

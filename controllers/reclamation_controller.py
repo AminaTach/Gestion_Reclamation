@@ -57,10 +57,9 @@ class ReclamationController(http.Controller):
         for file in documents_justificatifs:
             if file:
                 file_data = base64.b64encode(file.read())
-                request.env['ir.attachment'].sudo().create({
+                request.env['custom.attachment'].sudo().create({
                     'name': file.filename,
                     'datas': file_data,
-                    'res_model': 'gestion.reclamation',
                     'res_id': reclamation.id,
                 })
         

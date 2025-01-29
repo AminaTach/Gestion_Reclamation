@@ -3,6 +3,8 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 import base64
 import logging
+from datetime import datetime, timedelta
+
 
 _logger = logging.getLogger(__name__)
 
@@ -17,6 +19,7 @@ class ProjectTask(models.Model):
         help="Sélectionnez les employés assignés à cette tâche."
     )
 
+
 class Reclamation(models.Model):
     _name = 'gestion.reclamation'
     _description = 'Réclamation'
@@ -30,8 +33,10 @@ class Reclamation(models.Model):
     # Relation avec le modèle 'res.partner' (contact)
     reclamant_id = fields.Many2one('res.partner', string="Réclamant", required=True)
 
-    # Champ pour les documents justificatifs (One2many field)
-    document_ids = fields.One2many('ir.attachment', 'res_id', string="Documents justificatifs", domain=[('res_model', '=', 'gestion.reclamation')])
+    document_ids = fields.One2many(
+    'custom.attachment', 'res_id',
+    string="Documents justificatifs", ondelete="cascade"
+    )
 
     # Champ pour l'agence (à renseigner automatiquement)
     agence_id = fields.Many2one('res.partner', string="Agence", default=lambda self: self.env.user.partner_id.id)
@@ -214,3 +219,12 @@ class Reclamation(models.Model):
         pdf_content = buffer.getvalue()
         buffer.close()
         return pdf_content
+
+        
+class CustomAttachment(models.Model):
+    _name = 'custom.attachment'
+    _description = 'Custom Attachment'
+
+    name = fields.Char(string='Name')
+    datas = fields.Binary(string='File')
+    res_id = fields.Many2one('gestion.reclamation', string='Related Reclamation')
